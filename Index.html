@@ -52,13 +52,15 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
 .toptab.cover-tab.active{color:var(--navy);border-bottom-color:var(--navy);}
 .panel-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;}
 .stage-wrap{position:relative;width:100%;aspect-ratio:4/3;max-height:min(78vh,720px);margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:0 14px 40px rgba(34,49,79,.18);background:#faf8f4;border:1px solid #d8e8f2;}
+.stage-wrap.stage-shake{animation:stage-shake .42s ease-in-out;}
+@keyframes stage-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 .stage-wrap img{position:absolute;display:block;max-width:none;pointer-events:none;user-select:none;}
 .fit-layer{position:absolute;z-index:10;}
 .page-nav{position:absolute;z-index:30;width:44px;height:44px;border:1px solid rgba(255,255,255,.7);border-radius:50%;background:rgba(255,255,255,.82);color:var(--navy);font-size:28px;font-weight:900;line-height:1;cursor:pointer;box-shadow:0 2px 14px rgba(34,49,79,.28);backdrop-filter:blur(2px);display:flex;align-items:center;justify-content:center;}
 .page-nav:hover{background:rgba(255,255,255,.95);}
 .page-nav[hidden]{display:none;}
 .clickzone{position:absolute;inset:0;z-index:1;pointer-events:none;}
-.clickzone.pointing{cursor:crosshair;pointer-events:auto;z-index:5;}
+.clickzone.pointing{cursor:crosshair;pointer-events:auto;z-index:25;touch-action:none;}
 .hotspot-layer{position:absolute;inset:0;z-index:2;pointer-events:none;}
 .sentence-hotspot{position:absolute;z-index:2;border:none;padding:0;border-radius:8px;background:rgba(255,107,74,.12);box-shadow:inset 0 -3px 0 rgba(255,107,74,.5);cursor:pointer;pointer-events:auto;}
 .fit-layer.pointing .sentence-hotspot{pointer-events:none;}
@@ -69,6 +71,19 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
 .region.hit{opacity:1;border-color:var(--green);background:rgba(63,182,138,.18);}
 .region.hint{opacity:1;border-color:var(--board);background:rgba(255,201,60,.16);animation:softpulse 1.4s ease-in-out infinite;}
 @keyframes softpulse{0%,100%{opacity:.5}50%{opacity:1}}
+@keyframes star-burst{0%{opacity:0;transform:scale(.35) rotate(0deg)}25%{opacity:1}70%{opacity:.95}100%{opacity:0;transform:scale(1.55) rotate(22deg)}}
+@keyframes found-pop{0%{opacity:0;transform:scale(.85) translateY(8px)}45%{opacity:1;transform:scale(1.02) translateY(0)}100%{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes found-fade{0%,72%{opacity:1}100%{opacity:0}}
+.point-success-layer{position:absolute;inset:0;z-index:4;pointer-events:none;}
+.point-success-anchor{position:absolute;transform:translate(-50%,-50%);pointer-events:none;}
+.point-star-burst{position:relative;width:0;height:0;z-index:2;}
+.point-star-burst span{position:absolute;left:0;top:0;font-size:16px;color:#FFD54F;text-shadow:0 1px 6px rgba(0,0,0,.35);animation:star-burst 1.85s ease-out forwards;}
+.found-it-card{background:linear-gradient(145deg,rgba(63,182,138,.55),rgba(46,155,116,.5));color:#fff;border-radius:16px;padding:12px 20px;text-align:center;box-shadow:0 6px 20px rgba(34,49,79,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.4);text-shadow:0 1px 2px rgba(34,49,79,.25);}
+.found-it-card--anchored{position:absolute;left:50%;z-index:1;min-width:min(168px,42vw);padding:10px 16px;animation:found-pop .45s ease-out forwards,found-fade 4.2s ease-out forwards;}
+.found-it-card--below{top:14px;transform:translateX(-50%);}
+.found-it-card--above{bottom:14px;transform:translateX(-50%);}
+.found-it-title{font-size:16px;font-weight:900;letter-spacing:-.02em;}
+.found-it-sub{font-size:11px;font-weight:600;opacity:.95;margin-top:2px;}
 .word-picker{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;flex-shrink:0;}
 .word-btn{padding:7px 14px;border-radius:999px;border:2px solid #FFB8A8;background:#FFF6F3;font-weight:700;font-size:13px;cursor:pointer;color:#E2573A;display:flex;align-items:center;gap:5px;}
 .word-btn.active{background:var(--coral);border-color:var(--coral);color:#fff;}
@@ -79,7 +94,6 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
 .card-stack{display:flex;flex-direction:column;gap:16px;}
 .flipcard{perspective:1200px;cursor:pointer;position:relative;}
 .flipcard.point-card{cursor:default;}
-.flipcard.point-card .face.front{background:linear-gradient(180deg,#FFF9F0 0%,#FFF3E0 100%);border:2px dashed #FFB74D;box-shadow:0 8px 24px rgba(255,152,0,.12);}
 .flipcard.point-card .face.front::before{content:'👆 指一指';display:inline-block;font-size:10px;font-weight:800;color:#E65100;background:#FFE0B2;padding:3px 10px;border-radius:999px;margin-bottom:8px;align-self:flex-start;}
 .flip-inner{display:grid;grid-template-areas:"card";width:100%;min-height:108px;transition:transform .55s;transform-style:preserve-3d;}
 .flipcard.show-zh .flip-inner{min-height:124px;}
@@ -96,10 +110,12 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
 .face.back .face-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.35);}
 .face.front{background:#fff;box-shadow:0 4px 16px rgba(34,49,79,.08);}
 .face.back{background:linear-gradient(135deg,#3D4A62,#5A6B84);color:#fff;transform:rotateY(180deg);}
-.flipcard.from-text .face.front{border-left:4px solid var(--coral);box-shadow:0 4px 16px rgba(255,107,74,.1);background:linear-gradient(180deg,#fff 0%,#FFF8F6 100%);}
-.flipcard.from-image .face.front{border-left:4px solid #3A8FD6;box-shadow:0 4px 16px rgba(58,143,214,.1);background:linear-gradient(180deg,#fff 0%,#F4F9FF 100%);}
-.flipcard.from-text .face.back{background:linear-gradient(135deg,#C47B6C,#DFA294);}
-.flipcard.from-image .face.back{background:linear-gradient(135deg,#5A86A8,#86B0CC);}
+.flipcard.from-text:not(.point-card) .face.front{border-left:4px solid var(--coral);box-shadow:0 4px 16px rgba(255,107,74,.1);background:linear-gradient(180deg,#fff 0%,#FFF8F6 100%);}
+.flipcard.from-image:not(.point-card) .face.front{border-left:4px solid #3A8FD6;box-shadow:0 4px 16px rgba(58,143,214,.1);background:linear-gradient(180deg,#fff 0%,#F4F9FF 100%);}
+.flipcard.from-text:not(.point-card) .face.back{background:linear-gradient(135deg,#C47B6C,#DFA294);}
+.flipcard.from-image:not(.point-card) .face.back{background:linear-gradient(135deg,#5A86A8,#86B0CC);}
+.flipcard.point-card .face.front{background:linear-gradient(180deg,#FFF9F0 0%,#FFF3E0 100%);border:2px dashed #FFB74D;border-left:2px dashed #FFB74D;box-shadow:0 8px 24px rgba(255,152,0,.12);}
+.flipcard.point-card .face.back{background:linear-gradient(135deg,#3D4A62,#5A6B84);}
 .card-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;padding-top:6px;flex-shrink:0;border-top:1px solid rgba(229,223,208,.8);}
 .card-tts-btn{flex:none;width:28px;height:28px;border-radius:50%;border:none;background:#ebe4d6;font-size:12px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .card-tts-btn.speaking{background:var(--coral);color:#fff;}
@@ -157,8 +173,9 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
       <div class="stage-wrap" id="stageWrap">
         <img id="stageImg" alt="Picture book page">
         <div class="fit-layer" id="fitLayer">
-          <div class="clickzone" id="clickzone"></div>
           <div class="hotspot-layer" id="hotspotLayer"></div>
+          <div class="point-success-layer" id="pointSuccessLayer"></div>
+          <div class="clickzone" id="clickzone"></div>
         </div>
         <button type="button" class="page-nav" id="prevPageBtn" aria-label="上一页">‹</button>
         <button type="button" class="page-nav" id="nextPageBtn" aria-label="下一页">›</button>
@@ -193,11 +210,69 @@ const GUIDE_PAGES = [{"data":{"word_order":[],"words":{},"sentences":[],"story":
 let pageIndex = 0;
 let current = '';
 let pointing = false;
+let pointCardDone = false;
 let missCount = 0;
+let pointSuccessTimer = null;
+let stageShakeTimer = null;
+let lastStagePointAt = 0;
+const POINT_SUCCESS_FLASH_MS = 4600;
 let selectedVoice = null;
 let favoriteVoices = [];
 let showZh = false;
 try { favoriteVoices = JSON.parse(localStorage.getItem('guideFavoriteVoices') || '[]'); } catch(e) {}
+
+function hidePointSuccessFlash(){
+  const layer = document.getElementById('pointSuccessLayer');
+  if(layer) layer.innerHTML = '';
+  if(pointSuccessTimer){ clearTimeout(pointSuccessTimer); pointSuccessTimer = null; }
+}
+
+function playPointSuccessSound(){
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if(!Ctx) return;
+    const ctx = new Ctx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    const t = ctx.currentTime;
+    osc.frequency.setValueAtTime(523.25, t);
+    osc.frequency.setValueAtTime(783.99, t + 0.12);
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.22, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+    osc.start(t);
+    osc.stop(t + 0.45);
+    osc.onended = function(){ ctx.close(); };
+  } catch(e) {}
+}
+
+function showPointSuccessFlash(region){
+  hidePointSuccessFlash();
+  if(!region) return;
+  const cx = region.left + region.width / 2;
+  const cy = region.top + region.height / 2;
+  const cardBelow = cy < 68;
+  const layer = document.getElementById('pointSuccessLayer');
+  if(!layer) return;
+  const degs = [0, 45, 90, 135, 180, 225, 270, 315];
+  const stars = degs.map(function(deg, i){
+    return '<span style="transform:rotate('+deg+'deg) translateY(-48px);animation-delay:'+(i*0.06)+'s">★</span>';
+  }).join('');
+  const cardPos = cardBelow ? 'found-it-card--below' : 'found-it-card--above';
+  layer.innerHTML =
+    '<div class="point-success-anchor" style="left:'+cx+'%;top:'+cy+'%">' +
+      '<div class="point-star-burst" aria-hidden="true">'+stars+'</div>' +
+      '<div class="found-it-card found-it-card--anchored '+cardPos+'">' +
+        '<div class="found-it-title">Found it!</div>' +
+        '<div class="found-it-sub">找到了，真棒</div>' +
+      '</div>' +
+    '</div>';
+  playPointSuccessSound();
+  pointSuccessTimer = setTimeout(hidePointSuccessFlash, POINT_SUCCESS_FLASH_MS);
+}
 
 function setPointingMode(on){
   pointing = !!on;
@@ -206,6 +281,48 @@ function setPointingMode(on){
   if(!zone || !layer) return;
   zone.classList.toggle('pointing', pointing);
   layer.classList.toggle('pointing', pointing);
+}
+
+function isPointCardType(card){
+  var t = String((card && card.type) || '').toLowerCase();
+  return t === 'point' || t === 'pointing';
+}
+function hasPointCard(entry){
+  return !!(entry && (entry.cards||[]).some(isPointCardType));
+}
+
+function triggerStageShake(){
+  var wrap = document.getElementById('stageWrap');
+  if(!wrap) return;
+  wrap.classList.remove('stage-shake');
+  void wrap.offsetWidth;
+  wrap.classList.add('stage-shake');
+  if(stageShakeTimer) clearTimeout(stageShakeTimer);
+  stageShakeTimer = setTimeout(function(){ wrap.classList.remove('stage-shake'); }, 420);
+}
+
+function syncPointingMode(){
+  const data = GUIDE_PAGES[pageIndex].data;
+  const entry = (data.words||{})[current];
+  const wordPanel = document.getElementById('wordPanel');
+  const onWordTab = !!(wordPanel && wordPanel.classList.contains('show'));
+  const canPoint = onWordTab && hasPointCard(entry) && (entry.regions||[]).length > 0 && !pointCardDone;
+  setPointingMode(canPoint);
+}
+
+function hintDisplayRegion(r){
+  var shortSide = Math.min(r.width, r.height);
+  var longSide = Math.max(r.width, r.height);
+  var aspect = longSide / Math.max(shortSide, 0.35);
+  var minShort = 4.2;
+  if(aspect < 2.8 || shortSide >= minShort) return r;
+  var extra = (minShort - shortSide) / 2;
+  if(r.width <= r.height){
+    var left = Math.max(0, Math.min(99.5, r.left - extra));
+    return { left: left, top: r.top, width: Math.min(r.width + 2 * extra, 100 - left), height: r.height };
+  }
+  var top = Math.max(0, Math.min(99.5, r.top - extra));
+  return { left: r.left, top: top, width: r.width, height: Math.min(r.height + 2 * extra, 100 - top) };
 }
 
 function zhLine(text, extra){
@@ -242,6 +359,7 @@ function resolveWordSource(entry, sentences){
   const raw = String((entry&&entry.source)||'').toLowerCase().trim();
   if(raw==='text'||raw==='print'||raw==='printed'||raw==='sentence'||raw==='story') return 'text';
   if(raw==='image'||raw==='illustration'||raw==='picture'||raw==='visual'||raw==='art'||raw==='drawing') return 'image';
+  if(entry && entry.regions && entry.regions.length) return 'image';
   const pageText = (sentences||[]).map(s => String(s.text||'')).join(' ').toLowerCase();
   const inText = (label) => {
     const t = String(label||'').trim().toLowerCase();
@@ -253,7 +371,6 @@ function resolveWordSource(entry, sentences){
     return before && after;
   };
   if(inText(entry&&entry.label) || inText(entry&&entry.speak)) return 'text';
-  if(entry && entry.regions && entry.regions.length) return 'image';
   return 'text';
 }
 
@@ -417,6 +534,40 @@ if('speechSynthesis' in window){
 
 let fit = {x:0,y:0,w:0,h:0};
 
+function checkRegionHit(xPct, yPct, regions){
+  var exact = regions.findIndex(function(r){
+    return xPct >= r.left && xPct <= r.left + r.width && yPct >= r.top && yPct <= r.top + r.height;
+  });
+  if(exact >= 0) return exact;
+  var best = -1, bestScore = Infinity;
+  regions.forEach(function(r, idx){
+    var w = r.width, h = r.height, short = Math.min(w, h), long = Math.max(w, h);
+    var aspect = long / Math.max(short, 0.35);
+    var mx, my, maxDist;
+    if(aspect >= 2.8){
+      var shortPad = Math.max(3.5, Math.min(9, short * 0.55 + 3));
+      var longPad = Math.max(2, Math.min(5, long * 0.035));
+      mx = w >= h ? longPad : shortPad;
+      my = w >= h ? shortPad : longPad;
+      maxDist = Math.max(4.5, Math.min(10, shortPad + 1.5));
+    } else if(w * h >= 350 || w >= 38 || h >= 38){
+      mx = my = 2.5; maxDist = 3.5;
+    } else {
+      mx = Math.max(2.5, Math.min(6, (10 - w) / 2));
+      my = Math.max(2.5, Math.min(6, (10 - h) / 2));
+      maxDist = Math.max(mx, my) + 1.2;
+    }
+    var inBox = xPct >= r.left - mx && xPct <= r.left + r.width + mx && yPct >= r.top - my && yPct <= r.top + r.height + my;
+    var nx = Math.max(r.left, Math.min(xPct, r.left + r.width));
+    var ny = Math.max(r.top, Math.min(yPct, r.top + r.height));
+    var edgeDist = Math.hypot(xPct - nx, yPct - ny);
+    if(!inBox && edgeDist > maxDist) return;
+    var score = inBox ? edgeDist : edgeDist + 0.75;
+    if(score < bestScore){ bestScore = score; best = idx; }
+  });
+  return best;
+}
+
 function computeImageFit(cw, ch, iw, ih){
   if(!cw || !ch || !iw || !ih) return {x:0,y:0,w:cw,h:ch};
   const scale = Math.min(cw / iw, ch / ih);
@@ -556,9 +707,11 @@ function renderAll(){
   renderWordCards(data);
   renderStoryCards(data);
   renderBigCards(data);
-  pointing = false; missCount = 0;
+  pointing = false;
+  pointCardDone = false;
+  missCount = 0;
+  hidePointSuccessFlash();
   document.getElementById('status').textContent = '';
-  setPointingMode(false);
   const wordTab = document.getElementById('wordTab');
   const storyTab = document.getElementById('storyTab');
   const bigTab = document.getElementById('bigTab');
@@ -633,9 +786,10 @@ function renderWordPicker(data, order){
     btn.textContent = entry.label;
     btn.onclick = () => {
       current = id;
-      pointing = false; missCount = 0;
+      pointCardDone = false;
+      missCount = 0;
+      hidePointSuccessFlash();
       document.getElementById('status').textContent = '';
-      setPointingMode(false);
       speakWord(entry.speak || entry.label, 'chip-' + id);
       renderWordPicker(data, order);
       renderWordCards(data);
@@ -647,12 +801,14 @@ function renderWordPicker(data, order){
 function renderRegions(data){
   document.querySelectorAll('.region').forEach(r => r.remove());
   const entry = (data.words||{})[current];
-  if(!entry) return;
+  if(!entry || !(pointing || pointCardDone)) return;
   (entry.regions||[]).forEach(r => {
+    const showHint = pointing && !pointCardDone && missCount >= 2;
+    const box = showHint ? hintDisplayRegion(r) : r;
     const div = document.createElement('div');
-    div.className = 'region';
-    div.style.left = r.left+'%'; div.style.top = r.top+'%';
-    div.style.width = r.width+'%'; div.style.height = r.height+'%';
+    div.className = 'region' + (pointCardDone ? ' hit' : showHint ? ' hint' : '');
+    div.style.left = box.left+'%'; div.style.top = box.top+'%';
+    div.style.width = box.width+'%'; div.style.height = box.height+'%';
     document.getElementById('hotspotLayer').appendChild(div);
   });
 }
@@ -668,8 +824,8 @@ function renderWordCards(data){
   (entry.cards||[]).forEach((item, i) => {
     const el = document.createElement('div');
     const speakKey = 'card-' + i;
-    if(item.type === 'point'){
-      el.className = flipCardClass(' point-card' + sourceClass);
+    if(isPointCardType(item)){
+      el.className = flipCardClass(' point-card') + (pointCardDone ? ' flipped' : '');
       el.innerHTML =
         '<div class="flip-inner">' +
           '<div class="face front">' +
@@ -686,23 +842,26 @@ function renderWordCards(data){
       if(rbtn){
         rbtn.onclick = (e) => {
           e.stopPropagation();
+          pointCardDone = false;
           el.classList.remove('flipped');
-          document.querySelectorAll('.region').forEach(r => r.classList.remove('hit', 'hint'));
+          hidePointSuccessFlash();
           missCount = 0;
-          document.getElementById('status').textContent = '请在左侧图片上指认～';
-          setPointingMode(true);
+          document.getElementById('status').textContent = '';
+          syncPointingMode();
+          renderRegions(data);
         };
       }
       el.onclick = () => {
-        if(el.classList.contains('flipped')){
-          el.classList.remove('flipped');
-          document.querySelectorAll('.region').forEach(r => r.classList.remove('hit', 'hint'));
+        if(pointCardDone){
+          pointCardDone = false;
+          hidePointSuccessFlash();
           missCount = 0;
-          document.getElementById('status').textContent = '请在左侧图片上指认～';
-          setPointingMode(true);
+          document.getElementById('status').textContent = '';
+          syncPointingMode();
+          renderRegions(data);
+          el.classList.remove('flipped');
         }
       };
-      if((entry.regions||[]).length){ setPointingMode(true); }
     } else {
       el.className = flipCardClass(sourceClass);
       el.innerHTML =
@@ -725,6 +884,7 @@ function renderWordCards(data){
     c.appendChild(el);
   });
   updateCardTtsButtons();
+  syncPointingMode();
   renderRegions(data);
 }
 
@@ -765,43 +925,61 @@ function renderBigCards(data){
   renderQaCards('bigCards', data.big_questions);
 }
 
-document.getElementById('clickzone').addEventListener('click', e => {
+function handleStagePoint(clientX, clientY){
   if(!pointing) return;
+  var now = Date.now();
+  if(now - lastStagePointAt < 280) return;
+  lastStagePointAt = now;
   const entry = (GUIDE_PAGES[pageIndex].data.words||{})[current];
   if(!entry || !entry.regions || !entry.regions.length) return;
-  const rect = document.getElementById('clickzone').getBoundingClientRect();
+  const zone = document.getElementById('clickzone');
+  if(!zone) return;
+  const rect = zone.getBoundingClientRect();
   if(!rect.width || !rect.height) return;
-  const xPct = (e.clientX - rect.left) / rect.width * 100;
-  const yPct = (e.clientY - rect.top) / rect.height * 100;
-
-  // 智能自适应容差判定（尤其针对小物品）
-  const regions = entry.regions;
-  let hit = regions.findIndex(r => xPct >= r.left && xPct <= r.left + r.width && yPct >= r.top && yPct <= r.top + r.height);
-  if(hit < 0){
-    let minD = Infinity;
-    regions.forEach((r, idx) => {
-      const mx = Math.max(2.5, Math.min(6.0, (10.0 - r.width) / 2));
-      const my = Math.max(2.5, Math.min(6.0, (10.0 - r.height) / 2));
-      if(xPct >= r.left - mx && xPct <= r.left + r.width + mx && yPct >= r.top - my && yPct <= r.top + r.height + my){
-        const d = Math.hypot(xPct - (r.left + r.width / 2), yPct - (r.top + r.height / 2));
-        if(d < minD){ minD = d; hit = idx; }
-      }
-    });
-  }
-
+  const xPct = (clientX - rect.left) / rect.width * 100;
+  const yPct = (clientY - rect.top) / rect.height * 100;
+  const hit = checkRegionHit(xPct, yPct, entry.regions);
   const status = document.getElementById('status');
+  const data = GUIDE_PAGES[pageIndex].data;
   if(hit >= 0){
-    status.textContent = '找到了！真棒 🎉'; status.className = 'status';
-    setPointingMode(false);
-    document.querySelectorAll('.region')[hit]?.classList.add('hit');
-    const pc = document.querySelector('.point-card'); if(pc) pc.classList.add('flipped');
+    status.textContent = '';
+    status.className = 'status';
+    pointCardDone = true;
+    showPointSuccessFlash(entry.regions[hit]);
+    syncPointingMode();
+    renderRegions(data);
+    document.querySelectorAll('.point-card').forEach(function(pc){ pc.classList.add('flipped'); });
   } else {
+    triggerStageShake();
     missCount++;
-    status.textContent = missCount >= 2 ? '再看看这里附近～（提示已出现）' : '再找找看～';
+    status.textContent = missCount >= 2 ? '再看看这里附近～（提示已出现）' : '再找找看';
     status.className = 'status miss';
-    if(missCount >= 2) document.querySelectorAll('.region').forEach(r => r.classList.add('hint'));
+    renderRegions(data);
   }
-});
+}
+
+function onClickzonePointerUp(e){
+  if(!pointing) return;
+  if(e.pointerType === 'mouse' && e.button !== 0) return;
+  e.preventDefault();
+  e.stopPropagation();
+  handleStagePoint(e.clientX, e.clientY);
+}
+
+function onClickzoneClick(e){
+  if(!pointing) return;
+  if(Date.now() - lastStagePointAt < 320) return;
+  e.preventDefault();
+  e.stopPropagation();
+  handleStagePoint(e.clientX, e.clientY);
+}
+
+(function bindClickzone(){
+  const zone = document.getElementById('clickzone');
+  if(!zone) return;
+  zone.addEventListener('pointerup', onClickzonePointerUp);
+  zone.addEventListener('click', onClickzoneClick);
+})();
 
 document.querySelectorAll('.toptab').forEach(tab => {
   tab.addEventListener('click', () => {
@@ -810,9 +988,9 @@ document.querySelectorAll('.toptab').forEach(tab => {
     tab.classList.add('active');
     document.getElementById(tab.dataset.target).classList.add('show');
     syncWordPickerVisibility();
-    if(tab.dataset.target !== 'wordPanel'){
-      setPointingMode(false);
-    }
+    syncPointingMode();
+    const data = GUIDE_PAGES[pageIndex].data;
+    renderRegions(data);
   });
 });
 
