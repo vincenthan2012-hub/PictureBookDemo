@@ -15,10 +15,13 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
 .toolbar-brand{font-family:'Baloo 2',sans-serif;font-size:14px;font-weight:800;margin:0;flex-shrink:0;color:var(--navy);}
 .toolbar-frog{flex:1;min-width:0;display:flex;justify-content:center;overflow:hidden;}
 .toolbar-tools{display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;margin-left:auto;}
-.voice-wrap{display:flex;align-items:center;gap:6px;background:var(--paper);padding:6px 10px;border-radius:999px;border:1px solid var(--paper-border);}
-.voice-wrap select{border:none;background:transparent;font-size:12px;font-weight:700;color:var(--navy);max-width:160px;outline:none;cursor:pointer;}
-.star-btn{border:none;background:transparent;cursor:pointer;font-size:16px;padding:2px 6px;border-radius:6px;}
+.voice-wrap{display:flex;align-items:center;gap:6px;background:var(--paper);padding:6px 10px;border-radius:999px;border:1px solid var(--paper-border);min-height:40px;}
+.voice-label{font-size:11px;font-weight:700;color:var(--navy-soft);flex-shrink:0;}
+.voice-wrap select{border:none;background:transparent;font-size:12px;font-weight:700;color:var(--navy);max-width:160px;min-width:72px;outline:none;cursor:pointer;}
+.star-btn{border:none;background:transparent;cursor:pointer;font-size:16px;width:32px;height:32px;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .star-btn.on{color:#eab308;}
+.zh-icon{display:block;flex-shrink:0;}
+.zh-label,.zh-toggle .state{display:inline;}
 .frog-progress{--frog-pad:36px;padding:0;background:transparent;border:none;min-width:0;max-width:100%;}
 .frog-progress__scroll{display:flex;justify-content:center;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
 .frog-progress__scroll::-webkit-scrollbar{display:none;}
@@ -39,6 +42,19 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
 .frog-progress__frog{position:absolute;z-index:5;width:40px;height:40px;margin-left:-20px;margin-top:-34px;pointer-events:none;transition:left .45s cubic-bezier(.34,1.4,.64,1),top .45s cubic-bezier(.34,1.4,.64,1);}
 .frog-progress__frog.frog-hop{animation:frog-hop .45s cubic-bezier(.34,1.4,.64,1);}
 @keyframes frog-hop{0%{transform:translateY(0) scale(1)}35%{transform:translateY(-12px) scale(1.05,.95)}70%{transform:translateY(-3px) scale(.98,1.02)}100%{transform:translateY(0) scale(1)}}
+@media(max-width:767px){
+.frog-progress{--frog-pad:clamp(22px,6.8vw,30px);width:100%;flex:none;}
+.frog-progress__scroll{width:100%;justify-content:stretch;}
+.frog-progress__track{display:block;width:100%;max-width:100%;}
+.frog-progress__river{padding:6px 8px;border-width:2px;}
+.frog-progress__line{left:calc(8px + var(--frog-pad)/2);right:calc(8px + var(--frog-pad)/2);}
+.frog-progress__pads{gap:clamp(2px,1.1vw,6px);justify-content:space-between;width:100%;}
+.frog-progress__pad--lily{font-size:12px;}
+.frog-progress__cover-icon{font-size:11px;}
+.frog-progress__cover-text{font-size:7px;}
+.frog-progress__star{font-size:15px;}
+.frog-progress__frog{width:clamp(28px,8vw,34px);height:clamp(28px,8vw,34px);margin-left:calc(clamp(28px,8vw,34px)/-2);margin-top:calc(clamp(28px,8vw,34px)*-.85);}
+}
 .main{flex:1;min-height:0;overflow:hidden;padding:8px 16px;}
 .shell-inner{max-width:1400px;margin:0 auto;width:100%;height:100%;min-height:0;}
 .layout{display:grid;grid-template-columns:1fr;gap:20px;height:100%;min-height:0;}
@@ -139,7 +155,7 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
 .qtext{font-size:15px;font-weight:600;line-height:1.45;}
 .zhtext{font-size:12px;font-weight:500;color:var(--navy-soft);margin-top:4px;line-height:1.45;}
 .face.back .zhtext{color:rgba(255,255,255,.7);}
-.zh-toggle{display:flex;align-items:center;gap:6px;border:1px solid var(--paper-border);background:#fff;color:var(--navy-soft);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;}
+.zh-toggle{display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--paper-border);background:#fff;color:var(--navy-soft);border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;}
 .zh-toggle.on{background:var(--navy);border-color:var(--navy);color:#fff;}
 .zh-toggle .state{font-size:10px;padding:2px 6px;border-radius:999px;background:var(--paper);}
 .zh-toggle.on .state{background:rgba(255,255,255,.2);}
@@ -148,6 +164,31 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
 .panel-section{display:none;}
 .panel-section.show{display:block;}
 @media(max-width:640px){.flip-inner{min-height:116px;}.face{min-height:116px;}}
+@media(max-width:767px){
+html,body{height:auto;min-height:100%;overflow-x:hidden;}
+body{overflow-y:auto;overflow-x:hidden;}
+.app-shell{flex:none;min-height:0;}
+.toolbar{flex-direction:column;align-items:stretch;padding:10px 12px;gap:8px;}
+.toolbar-brand{display:none;}
+.toolbar-tools{width:100%;margin-left:0;flex-wrap:nowrap;justify-content:flex-end;gap:4px;order:-1;}
+.toolbar-frog{width:100%;flex:none;order:0;}
+.voice-wrap{flex:1;min-width:0;max-width:min(52vw,220px);padding:4px 8px;gap:4px;}
+.voice-label{display:none;}
+.voice-wrap select{font-size:11px;max-width:100%;width:0;flex:1;}
+.star-btn{width:32px;height:32px;}
+.zh-toggle{width:40px;height:40px;padding:0;gap:0;}
+.zh-label,.zh-toggle .state{display:none;}
+.main{flex:none;overflow:visible;padding:8px 12px;}
+.shell-inner{height:auto;min-height:0;}
+.layout{height:auto;min-height:0;}
+.panel-col{overflow:visible;min-height:0;}
+.panel-scroll{flex:none;overflow:visible;min-height:0;padding-bottom:16px;}
+.stage-wrap{max-height:none;}
+.face{max-height:none;}
+.face-scroll{overflow-y:visible;overscroll-behavior:auto;}
+.card-tts-btn{width:36px;height:36px;font-size:14px;}
+.toptab{min-height:44px;padding:10px 12px;}
+}
 </style>
 </head>
 <body>
@@ -156,14 +197,15 @@ body{margin:0;background:var(--paper);font-family:'Nunito',sans-serif;color:var(
   <p class="toolbar-brand">📚 绘本导读</p>
   <div class="toolbar-frog" id="frogProgressHost"></div>
   <div class="toolbar-tools">
-    <div class="voice-wrap">
-      <span style="font-size:11px;font-weight:700;color:var(--navy-soft)">TTS</span>
-      <select id="voiceSelect"></select>
-      <button class="star-btn" id="starBtn" title="收藏音色">☆</button>
-    </div>
-    <button class="zh-toggle" id="zhToggle" type="button" title="中文提示">
-      <span>文A</span><span>中文</span><span class="state" id="zhState">OFF</span>
+    <button class="zh-toggle" id="zhToggle" type="button" title="中文提示" aria-label="中文提示">
+      <svg class="zh-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+      <span class="zh-label">中文</span><span class="state" id="zhState">OFF</span>
     </button>
+    <div class="voice-wrap">
+      <span class="voice-label">TTS</span>
+      <select id="voiceSelect" title="朗读音色"></select>
+      <button class="star-btn" id="starBtn" title="收藏音色" type="button" aria-label="收藏音色">☆</button>
+    </div>
   </div>
 </header>
 <main class="main">
